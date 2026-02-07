@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { contactApi } from "@/lib/api";
 import { Mail, Phone, MapPin, Handshake, Clock, Send } from "lucide-react";
+import emailjs from '@emailjs/browser';
 
 const contactInfo = [
   {
@@ -73,12 +74,36 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
+      // Save to database first
       const response = await contactApi.submit({
         name: formData.name,
         email: formData.email,
         subject: formData.subject,
         message: formData.message,
       });
+
+      // Send email using EmailJS from frontend
+      try {
+        await emailjs.send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_z7uez9q',
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_wkdffzg',
+          {
+            to_email: 'foodngo1@gmail.com',
+            from_name: formData.name,
+            from_email: formData.email,
+            ticket_id: response.ticketId,
+            subject: formData.subject,
+            message: formData.message,
+            priority: formData.subject === 'technical' ? 'high' : formData.subject === 'general' ? 'low' : 'medium',
+            submitted_date: new Date().toLocaleString('en-IN', { dateStyle: 'full', timeStyle: 'short' }),
+          },
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '1vsTfhLrBsUcCAzW3'
+        );
+        console.log('✉️ Email sent successfully via EmailJS');
+      } catch (emailError) {
+        console.error('Email sending failed (non-critical):', emailError);
+        // Don't fail the form submission if email fails
+      }
 
       toast({
         title: "Message Sent!",
