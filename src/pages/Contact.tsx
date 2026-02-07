@@ -178,6 +178,7 @@ const Contact = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           required
+                          autoComplete="name"
                           className="h-12"
                         />
                       </div>
@@ -191,6 +192,7 @@ const Contact = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           required
+                          autoComplete="email"
                           className="h-12"
                         />
                       </div>
@@ -202,7 +204,7 @@ const Contact = () => {
                         value={formData.subject}
                         onValueChange={(value) => setFormData({ ...formData, subject: value })}
                       >
-                        <SelectTrigger className="h-12">
+                        <SelectTrigger id="subject" name="subject" className="h-12">
                           <SelectValue placeholder="Select inquiry type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -224,6 +226,7 @@ const Contact = () => {
                         value={formData.message}
                         onChange={handleInputChange}
                         required
+                        autoComplete="off"
                         className="min-h-[150px] resize-none"
                       />
                     </div>
