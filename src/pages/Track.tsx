@@ -301,31 +301,41 @@ const Track = () => {
                 </Card>
 
                 {donation.location && (
-                  <Card className="border-0 shadow-card overflow-hidden animate-scale-in" style={{ animationDelay: "0.1s" }}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <MapPin className="w-5 h-5 text-primary" />
-                        {donation.type === 'monetary' ? 'Transaction Details' : 'Pickup Location'}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {donation.type === 'monetary' ? (
-                        <div className="text-center py-4">
-                          <CheckCircle className="w-12 h-12 mx-auto mb-2 text-success" />
-                          <p className="font-semibold text-success">Payment Successful</p>
-                          <p className="text-sm text-muted-foreground mt-1">Thank you for your contribution</p>
-                        </div>
-                      ) : (
-                        <div className="h-32 bg-muted flex items-center justify-center">
-                          <div className="text-center text-muted-foreground">
-                            <MapPin className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                            <p className="text-sm">{donation.location.city || 'Location'}</p>
+                    <Card className="border-0 shadow-card overflow-hidden animate-scale-in" style={{ animationDelay: "0.1s" }}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <MapPin className="w-5 h-5 text-primary" />
+                          {donation.type === 'monetary' ? 'Transaction Details' : 'Pickup Location'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {donation.type === 'monetary' ? (
+                          <div className="text-center py-4">
+                            <CheckCircle className="w-12 h-12 mx-auto mb-2 text-success" />
+                            <p className="font-semibold text-success">Payment Successful</p>
+                            <p className="text-sm text-muted-foreground mt-1">Thank you for your contribution</p>
                           </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
+                        ) : (
+                          /* Replaced placeholder with Google Maps iframe */
+                          <div className="w-full h-48 sm:h-64 rounded-md overflow-hidden bg-muted">
+                            <iframe
+                              title="Pickup Location Map"
+                              width="100%"
+                              height="100%"
+                              style={{ border: 0 }}
+                              loading="lazy"
+                              allowFullScreen
+                              referrerPolicy="no-referrer-when-downgrade"
+                              // Dynamically inserts the city name, defaults to Pondicherry
+                              src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                                donation.location.city || 'Pondicherry'
+                              )}&output=embed`}
+                            ></iframe>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )}
               </div>
             </div>
           </div>
